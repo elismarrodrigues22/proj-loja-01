@@ -17,7 +17,7 @@
         }
 
         #banner {
-            background-color: black;
+            background-color: orange;
             padding: 30px 300px 30px 300px;
             width: 100%;
             position: fixed;
@@ -110,7 +110,7 @@
         }
     </style>
     <div id="banner">
-        <img src="imagens\loja1.jpg" alt="">
+        <img src="fake-api\imagens\loja1.jpg" alt="">
         <h1>Nome da Loja</h1>
     </div>
     <div id="container">
@@ -168,6 +168,18 @@
                 }
 
             }
+
+            javax = new XMLHttpRequest();
+            function buscarProdutos(){
+                javax.open("GET","https://elismarrodrigues22.github.io/proj-loja-01/fake-api/produto.js");
+                javax.send();
+                javax.onload = function(){
+                    console.log(this.responseText);
+                }
+
+            }
+
+                buscarProdutos();
 
         </script>
 
