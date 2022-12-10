@@ -8,10 +8,5 @@
 ]
 
 
-letraA.jpg
-letraB.jpg
-letraC.jpg
-letraD.jpg
-letraE.jpg
-letraF.jpg
+
 

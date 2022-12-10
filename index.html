@@ -121,35 +121,7 @@
                 <p class="valor">R$ 150,00</p>
             </div>
 
-            <div class="produto">
-                <img src="fake-api\imagens\letraB.jpg" alt="">
-                <p class="nome">Nome do Produto</p>
-                <p class="valor">R$ 150,00</p>
-            </div>
-
-            <div class="produto">
-                <img src="fake-api\imagens\letraC.jpg" alt="">
-                <p class="nome">Nome do Produto</p>
-                <p class="valor">R$ 150,00</p>
-            </div>
-
-            <div class="produto">
-                <img src="fake-api\imagens\letraD.jpg" alt="">
-                <p class="nome">Nome do Produto</p>
-                <p class="valor">R$ 150,00</p>
-            </div>
-
-            <div class="produto">
-                <img src="fake-api\imagens\letraE.jpg" alt="">
-                <p class="nome">Nome do Produto</p>
-                <p class="valor">R$ 150,00</p>
-            </div>
-
-            <div class="produto">
-                <img src="fake-api\imagens\letraF.jpg" alt="">
-                <p class="nome">Nome do Produto</p>
-                <p class="valor">R$ 150,00</p>
-            </div>
+           
         </div>
         <div id="bt-fixo">
             <i style="font-size:54px" class="fa">&#128722;</i>
@@ -174,10 +146,19 @@
                 javax.open("GET","https://elismarrodrigues22.github.io/proj-loja-01/fake-api/produto.js");
                 javax.send();
                 javax.onload = function(){
-                    console.log(this.responseText);
+                    lsProdutos = this.responseText;
+                    lsProdutos = JSON.parse(lsProdutos);
+                    clonarProdutos(lsProdutos);
                 }
 
             }
+
+                function clonarProdutos(lsProdutos){
+                    
+                    for(produto in lsProdutos){
+                        console.log(produto);
+                    }
+                }
 
                 buscarProdutos();
 
