@@ -11,13 +11,13 @@
 
 <body>
     <style>
-        * {
+      * {
             margin: 0px;
             padding: 0px;
         }
 
         #banner {
-            background-color: orange;
+            background-color: black;
             padding: 30px 300px 30px 300px;
             width: 100%;
             position: fixed;
@@ -35,19 +35,33 @@
         }
 
         #container {
-            /* margin: 30px 300px 0px 300px;
-            padding-top: 70px;*/
             display: grid;
             place-items: center;
+        }
+
+        .ls-produto {
+            width: 700px;
+            margin-top: 106px;
+        }
+
+        #lsQuantidade {
+            width: 700px;
+            margin-top: 106px;
+            display: none;
         }
 
         .produto {
             border: solid black 3px;
             width: 200px;
+            height: 210px;
             float: left;
             margin: 10px;
-            height: 210px;
             cursor: pointer;
+            /* border-color: aqua; */
+        }
+
+        .produto-selecionado {
+            border-color: aqua;
         }
 
         .produto img {
@@ -67,9 +81,12 @@
         .produto .valor {
             display: flex;
             align-items: center;
+            height: 15%;
+            padding-left: 10px;
         }
 
-        #bt-fixo {
+        #bt-fixo,
+        #bt-fixo span {
             background-color: aqua;
             width: 90px;
             height: 90px;
@@ -79,34 +96,69 @@
             border-radius: 50%;
             border: solid black 3px;
             position: fixed;
-            bottom: 3px;
-            right: 10%;
+            bottom: 30px;
+            right: 30px;
+            cursor: pointer;
         }
 
-        #bt-fixo {
-            right: 30px;
-            top: 0;
+        #bt-fixo span {
+            width: 20px;
+            height: 20px;
+            bottom: 95px;
+            background-color: black;
+            color: aqua;
         }
 
         @media (max-width: 700px) {
             #banner {
                 padding: 30px 30px 30px 30px;
             }
+
+            #bt-fixo {
+                right: 30px;
+            }
         }
 
-
-
-        .ls-produto {
-            width: 700px;
-            margin-top: 106px;
+        table {
+            width: 100%;
         }
 
-        #bt-fixo span {
+        tr {
+            height: 30px;
+            background-color: gray;
+            text-align: center;
+
+        }
+
+        tr span {
             background-color: black;
-            color: aqua;
-            padding: 3px;
-            position: absolute;
-            top: 0;
+            color: white;
+            height: 100%;
+            padding: 6%;
+            margin-right: 2px;
+            margin-left: 2px;
+            cursor: pointer;
+            float: left;
+            width: 20px;
+        }
+
+        label {
+            font-size: larger;
+        }
+
+        #nome {
+            background-color: gray;
+            width: 70%;
+            height: 30px;
+            border: none;
+        }
+
+        #bt-enviar {
+            background-color: black;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
         }
     </style>
     <div id="banner">
@@ -114,38 +166,42 @@
         <h1>Nome da Loja</h1>
     </div>
     <div id="container">
-        <div class="ls-produto">
+        <div class="ls-produto" id="lsProduto">
             <div class="produto" onclick="addCarrinho(this)">
                 <img src="fake-api\imagens\letraA.jpg" alt="">
                 <p class="nome">Nome do Produto</p>
                 <p class="valor">R$ 150,00</p>
             </div>
 
-           
+
         </div>
-        <div id="bt-fixo">
+        <div id="bt-fixo" onclick="aleert(0)">
             <i style="font-size:54px" class="fa">&#128722;</i>
             <span id="qtd-produtoCarrinho">0</span>
         </div>
 
         <script>
-
-            function addCarrinho(elemento) {
+            qtdCarrinho = 0;
+            function addCarrinho(elemento, i) {
                 if (elemento.classList.length == 2) {
-                    document.getElementById("qtd-produtoCarrinho").innerHTML = 0;
+                    qtdCarrinho--;
+                    document.getElementById("qtd-produtoCarrinho").innerHTML = qtdCarrinho;
                     elemento.classList.remove("produto-selecionado");
-                }else{
-                    document.getElementById("qtd-produtoCarrinho").innerHTML = 1;
+                    produto[i].carrinho = false;
+                } else {
+                    qtdCarrinho++;
+                    document.getElementById("qtd-produtoCarrinho").innerHTML = qtdCarrinho;
                     elemento.classList.add("produto-selecionado");
+                    produto[i].carrinho = true;
                 }
 
             }
 
             javax = new XMLHttpRequest();
-            function buscarProdutos(){
-                javax.open("GET","https://elismarrodrigues22.github.io/proj-loja-01/fake-api/produto.js");
+            function buscarProdutos() {
+                javax.open("GET", "https://elismarrodrigues22.github.io/proj-loja-01/fake-api/produto.js");
                 javax.send();
-                javax.onload = function(){
+                javax.onload = function () {
                     lsProdutos = this.responseText;
                     lsProdutos = JSON.parse(lsProdutos);
                     clonarProdutos(lsProdutos);
@@ -153,14 +209,26 @@
 
             }
 
-                function clonarProdutos(lsProdutos){
-                    
-                    for(produto in lsProdutos){
-                        console.log(produto);
-                    }
-                }
+            function clonarProdutos(lsProdutos) {
+                txtProduto = "";
+                i = 0;
+                for (produto of lsProdutos) {
+                    console.log(produto);
+                    txtProduto +=`
+                        <div class="produto" onclick="addCarrinho(this, ${i})">
+                            <img src="${produto.img}" alt="">
+                                <p class="nome">${produto.nome}</p>
+                                <p class="valor">${produto.valor}</p>
+                        </div>
+                        `;
 
-                buscarProdutos();
+                        produto.carrinho = false;
+                        i++;
+                }
+                document.getElementById("lsProduto").innerHTML = txtProduto;
+            }
+
+            buscarProdutos();
 
         </script>
 
